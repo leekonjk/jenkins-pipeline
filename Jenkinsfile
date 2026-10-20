@@ -1,21 +1,37 @@
+
 pipeline {
     agent any
 
     stages {
         stage('Build') {
             steps {
-                sh 'python3 f1.py'
+                echo 'Starting build stage'
+                sh 'python3 -m compileall -q .'
             }
         }
+
         stage('Test') {
             steps {
-                sh 'python3 f2.py'
+                echo 'Starting test stage'
+                sh 'python3 -m unittest discover -s tests'
             }
         }
+
         stage('Deploy') {
             steps {
-                sh 'python3 f3.py'
+                echo 'Starting deployment stage'
+                echo 'Deployment command goes here'
             }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+
+        failure {
+            echo 'Pipeline failed. Check the stage logs.'
         }
     }
 }
